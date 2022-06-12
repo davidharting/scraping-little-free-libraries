@@ -5,7 +5,9 @@ We want to send a copy of a book to all Little Free Libraries in Indiana. We can
 
 ## Working with the API
 
-* API endpoint example:
+* Search for a list of libraries:
+<br />https://appapi.littlefreelibrary.org/library/pin.json?page_size=50&distance=50&near=indiana
+* Fetch an individual library
   * https://appapi.littlefreelibrary.org/libraries/65843.json
   * https://appapi.littlefreelibrary.org/libraries/38071.json
 
