@@ -24,20 +24,27 @@ const LIMIT = limit();
 async function main() {
   logger.trace({ limit: LIMIT }, 'Kicking off a run.');
   const librariesIndex = await getLibraryIndex();
-  logger.trace(
-    { numLibraries: librariesIndex.libraries.length },
-    'Looking at index'
-  );
+  const numLibraries = librariesIndex.libraries.length;
+  logger.trace({ numLibraries }, 'Looking at index');
 
   const libraries: Array<Library> = [];
 
-  for (let i = 0; i < LIMIT; i++) {
+  const loopMax = LIMIT > numLibraries ? numLibraries : LIMIT;
+
+  for (let i = 0; i < loopMax; i++) {
     const item = librariesIndex.libraries[i];
-    const library = await showLibrary({
-      id: item.id,
-      delayInMsIfCacheMiss: 1000,
-    });
-    libraries.push(library);
+    if (!item) {
+      logger.warn(
+        { i, numLibraries },
+        'Did not find a library at index. Skipping.'
+      );
+    } else {
+      const library = await showLibrary({
+        id: item.id,
+        delayInMsIfCacheMiss: 1000,
+      });
+      libraries.push(library);
+    }
   }
 
   logger.trace(
