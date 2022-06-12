@@ -1,11 +1,15 @@
 import { get, put, destroyCache } from './index';
-import { logger } from '../logger';
 
 describe('cache', () => {
-  afterEach(async done => {
-    const result = await destroyCache();
-    logger.info({ result }, 'Destroyed directory from afterEach');
-    done();
+  beforeAll(() => {
+    process.env.CACHE_DIRECTORY = '.cache-test';
+  });
+  afterAll(() => {
+    delete process.env['CACHE_DIRECTORY'];
+  });
+
+  afterEach(async () => {
+    await destroyCache();
   });
 
   describe('put', () => {
@@ -15,6 +19,15 @@ describe('cache', () => {
       await put(key, contents);
       const retrievedContents = await get(key);
       expect(retrievedContents).toBe(contents);
+    });
+
+    it('should over-write file (not append) contents if the same key is "put" to twice', async () => {
+      const key = 'my_name.txt';
+      await put(key, 'what');
+      await put(key, 'jonas');
+      const retrieved = await get(key);
+      expect(retrieved).toBe('jonas');
+      return true;
     });
   });
 
