@@ -11,7 +11,7 @@ const limit = (): number => {
   const fallback = 10;
   if (process.env.LIMIT) {
     const parsed = parseInt(process.env.LIMIT);
-    if (parsed === NaN) {
+    if (isNaN(parsed)) {
       return fallback;
     }
     return parsed;
