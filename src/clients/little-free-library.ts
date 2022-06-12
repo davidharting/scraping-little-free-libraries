@@ -57,7 +57,7 @@ export const getLibraryIndex = async (): Promise<LibraryIndexPayload> => {
   logger.trace({ cacheKey }, 'Cache missed. Attempting API call for libraries');
   const response = await axios.get(
     'https://appapi.littlefreelibrary.org/library/pin.json',
-    { params: { page_size: 500, distance: 50, near: 'indiana' } }
+    { params: { page_size: 2000, distance: 125, near: 'indianapolis' } }
   );
 
   const json = response.data;
